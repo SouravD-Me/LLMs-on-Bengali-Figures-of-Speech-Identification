@@ -94,8 +94,8 @@ This repo contains the **BengFoS** dataset, code to reproduce the experiments (f
   </tbody>
 </table>
 
-* **End-to-End Experiments** — Zero-shot baselines, fine-tuning (LoRA & full), quantized deployments, and layer-wise probing.
-* **Featured Figures** — Three visually compelling figures (layer-wise probe, confusion matrix, token attention heatmap) are embedded below so visitors immediately see the research’s most important results.
+* **End-to-End Experiments** — A large-scale evaluation of state-of-the-art LLMs (Llama-3 8B and DeepSeek R1 Distill 7B) on the FoS task, including zero-shot baselines, dedicated fine-tuning, and deployment.
+* **Extensive Probing Analyses** — An in-depth probing analyses of the fine-tuned models, examining their layer-wise representations for FoS knowledge, providing novel insights into how figurative language is internally represented by LLMs. 
 
 ---
 
@@ -438,5 +438,8 @@ BibTeX:
   note = {BengFoS dataset + experiments; PDF in /paper}
 }
 ```
+---
+**Please contact the authors for any queries:**
 
+### Sourav Das and Kripabandhu Ghosh
 ---
