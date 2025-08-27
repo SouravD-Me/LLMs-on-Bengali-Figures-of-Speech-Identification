@@ -1,4 +1,4 @@
-# Bengali Figures of Speech — BengFoS 📖
+# Can LLMs be Literary Companions?: Analysing LLMs on Bengali Figures of Speech Identification 📖
 
 [![paper badge](https://img.shields.io/badge/Paper-PDF-blue)](#paper) [![license](https://img.shields.io/badge/License-CC--BY--NC--SA-lightgrey)](LICENSE)
 [![python](https://img.shields.io/badge/python-3.10%2B-green)]() [![status](https://img.shields.io/badge/status-experimental-orange)]()
@@ -7,7 +7,7 @@
 
 ## 🔎 Project Snapshot
 
-**Can LLMs be Literary Companions?: Analysing LLMs on Bengali Figures of Speech Identification** — this repo contains the **BengFoS** dataset, code to reproduce the experiments (fine-tuning, quantized deployment, probing), visualizations, and the paper PDF in `/paper`. The README below includes three *featured figures* from the experiments placed for maximum visual appeal and quick insight.
+This repo contains the **BengFoS** dataset, code to reproduce the experiments (fine-tuning, quantized deployment, probing), visualizations, and the paper PDF in `/paper`. The README below includes three *featured figures* from the experiments placed for maximum visual appeal and quick insight.
 
 ---
 
@@ -311,21 +311,108 @@ python src/analysis_utils.py --pred results/deepseek-lora-eval.json --confusion 
 
 ---
 
-# 📊 Results (with featured figures)
+# 📊 Results
 
-The featured figures summarize the paper’s takeaways:
+Our experiments reveal how different LLMs perform on Bengali Figures of Speech identification, from zero-shot baselines to fine-tuned and quantized deployments. The zero-shot setup highlights the inherent weakness of even strong SoTA models on this niche literary task, underscoring the need for adaptation. Fine-tuning (full and parameter-efficient) leads to notable gains, while 16-bit quantization offers nearly identical or better performance at lower computational cost. Finally, probing and deployment evaluations provide deeper insight into per-class behavior and the comparative strengths of DeepSeek R1 and Llama-3.  
 
-* **Figure 1 (Layer probe)**: Shows where FoS signals are strongest in the network — helps justify probe and interpretability claims.
-* **Figure 2 (Confusion matrix)**: Reveals label-pair weaknesses — useful for future annotation/augmentation.
-* **Figure 3 (Attention heatmap)**: Makes the model’s focus interpretable at token level and is highly shareable in talks and the README.
+### 🟡 Zero-shot Comparison:
 
-Include a captioned table with the final numbers (replace with exact experiment outputs):
+<!-- Table 1 — Zero-shot comparison -->
+<table align="center" style="border-collapse:collapse; margin:0 auto; width:100%; max-width:900px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-align:center;">
+  <thead>
+    <tr>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Model</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Accuracy</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Avg. Confidence</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">F1 Score</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Precision</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Recall</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Llama-3 8B</td><td>0.4211</td><td>0.4401</td><td>0.4178</td><td>0.4329</td><td>0.4016</td></tr>
+    <tr><td>DeepSeek-R1 Distill 7B</td><td>0.4179</td><td>0.4310</td><td>0.4023</td><td>0.4257</td><td>0.4175</td></tr>
+    <tr><td>Mixtral 7B</td><td>0.3536</td><td>0.3817</td><td>0.3410</td><td>0.3729</td><td>0.3386</td></tr>
+    <tr><td>GPT-3.5</td><td>0.3647</td><td>N/A</td><td>0.3538</td><td>0.3790</td><td>0.3472</td></tr>
+    <tr><td>Gemini-1.5</td><td>0.3818</td><td>N/A</td><td>0.3652</td><td>0.3812</td><td>0.3590</td></tr>
+  </tbody>
+</table>
 
-| Setup                           | Metric (micro-F1) |
-| ------------------------------- | ----------------: |
-| Zero-shot Llama-3 (8B)          |             0.418 |
-| Fine-tuned Llama-3 (16-bit)     |              0.54 |
-| Fine-tuned DeepSeek R1 (16-bit) |              0.56 |
+*Table 1: Classification performance comparison of different LLMs on zero-shot setup. Confidence scores were not produced by API-based models such as GPT and Gemini. The low values clearly indicate that the pre-trained SoTA LLMs lack the capability to identify Bengali FoS, thus motivating fine-tuning.*
+
+### 🟡 Fine-tuning Performance (5-fold CV):
+
+<!-- Table 2 — Fine-tuning performance (5-fold CV) -->
+<table align="center" style="border-collapse:collapse; margin:0 auto; width:100%; max-width:700px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-align:center;">
+  <thead>
+    <tr>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Model Variant</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Accuracy</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Macro-F1</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Micro-F1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>DeepSeek R1 (full)</td><td>0.55</td><td>0.53</td><td>0.56</td></tr>
+    <tr><td>DeepSeek R1 + Adapters</td><td>0.52</td><td>0.51</td><td>0.53</td></tr>
+    <tr><td>DeepSeek R1 + LoRA</td><td>0.51</td><td>0.50</td><td>0.52</td></tr>
+    <tr><td><b>DeepSeek R1 (16-bit quantized)</b></td><td><b>0.55</b></td><td><b>0.54</b></td><td><b>0.56</b></td></tr>
+    <tr><td>Llama-3 (full)</td><td>0.55</td><td>0.53</td><td>0.55</td></tr>
+    <tr><td>Llama-3 + Adapters</td><td>0.53</td><td>0.52</td><td>0.54</td></tr>
+    <tr><td>Llama-3 + LoRA</td><td>0.52</td><td>0.51</td><td>0.53</td></tr>
+    <tr><td><b>Llama-3 (16-bit quantized)</b></td><td><b>0.54</b></td><td><b>0.55</b></td><td><b>0.56</b></td></tr>
+  </tbody>
+</table>
+
+*Table 2: Fine-tuning performance on BengFoS (5-fold CV) by both LLMs. The 16-bit quantized variants achieve marginally superior results.*
+
+### 🟡 Comparative Deployment Performance (16-bit Quantized):
+
+<!-- Table 7 — Comparative deployment performance (16-bit quantized) -->
+<table align="center" style="border-collapse:collapse; margin:0 auto; width:100%; max-width:1000px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; text-align:center;">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="4" style="border-bottom:1px solid #ddd; padding:8px 10px;">Llama-3 8B (16-bit)</th>
+      <th colspan="4" style="border-bottom:1px solid #ddd; padding:8px 10px;">DeepSeek R1 Distill 7B (16-bit)</th>
+    </tr>
+    <tr>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Metric</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Precision</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Recall</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">F1-Score</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Support</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Precision</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Recall</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">F1-Score</th>
+      <th style="padding:6px 10px; border-bottom:1px solid #ddd;">Support</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:6px 10px;">Micro Avg.</td>
+      <td>0.17</td><td>0.53</td><td>0.26</td><td>649</td>
+      <td>0.32</td><td>0.92</td><td>0.47</td><td>649</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;">Macro Avg.</td>
+      <td>0.15</td><td>0.49</td><td>0.19</td><td>649</td>
+      <td>0.50</td><td>0.88</td><td>0.50</td><td>649</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;">Weighted Avg.</td>
+      <td>0.35</td><td>0.53</td><td>0.40</td><td>649</td>
+      <td>0.58</td><td>0.92</td><td>0.64</td><td>649</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;">Samples Avg.</td>
+      <td>0.16</td><td>0.52</td><td>0.24</td><td>649</td>
+      <td>0.58</td><td>0.90</td><td>0.64</td><td>649</td>
+    </tr>
+  </tbody>
+</table>
+
+*Table 3: Comparative deployment performance of 16-bit quantized models on the BengFoS dataset.*
 
 ---
 
