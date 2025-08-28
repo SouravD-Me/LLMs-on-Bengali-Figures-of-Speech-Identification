@@ -443,14 +443,26 @@ BibTeX:
 
 ```bibtex
 @inproceedings{das2025bengfos,
-  title = {Can LLMs be Literary Companions?: Analysing LLMs on Bengali Figures of Speech Identification},
-  author = {Sourav Das and Kripabandhu Ghosh},
-  year = {2025},
-  note = {BengFoS dataset + experiments; PDF in /paper}
+  title     = {Can LLMs be Literary Companions?: Analysing LLMs on Bengali Figures of Speech Identification},
+  author    = {Sourav Das and Kripabandhu Ghosh},
+  booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  month     = {Dec},
+  year      = {2025},
+  publisher = {Association for Computational Linguistics},
+  address   = {To appear},
+  note      = {Accepted to EMNLP 2025 Main Conference},
+  url       = {paper/Bengali\_FoS\_Identification.pdf}
 }
 ```
 ---
-**Please contact the authors for any queries:**
 
-### Sourav Das | Kripabandhu Ghosh
+<div align="center">
+
+### Please contact the authors for any queries:
+
+### [**Sourav Das**](https://www.linkedin.com/in/souravdme/) &nbsp; | &nbsp; [**Kripabandhu Ghosh**](https://www.linkedin.com/in/kripabandhu-ghosh)
+
+</div>
+
+
 ---
