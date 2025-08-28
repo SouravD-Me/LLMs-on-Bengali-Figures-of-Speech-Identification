@@ -416,11 +416,22 @@ Our experiments reveal how different LLMs perform on Bengali Figures of Speech i
 
 ---
 
-# 🔬 Probing & interpretability
+# 🔬 Probing & Interpretability
 
-* `src/probe.py` runs layer-wise probes and saves `Visualizations/Probing Visualizations/Layer Probing Results for DeepSeek R1 Distilled 7B.png`.
-* `notebooks/` includes interactive notebooks that reproduce Figures 2 & 3 from the paper.
-* When generating attention heatmaps, choose short, high-confidence test examples for the clearest visualization.
+* **Layer signals:** FoS cues peak in mid‑layers for DeepSeek and later layers for Llama‑3.
+* **Class trends:** Simile and Metaphor are easier to separate; subtler FoS types are harder.
+* **Attention match:** Tokens highlighted by attention align with probe results.
+* **Deployment tip:** Strong mid‑layer signals suggest LoRA + 16‑bit quantization is efficient.
+
+<p align="center">
+  <img src="Visualizations/Probing%20Visualizations/Layer%20Probing%20Results%20for%20DeepSeek%20R1%20Distilled%207B.png" alt="Layer-wise probing micro-F1 per layer" style="max-width:800px; width:100%; height:auto;">
+</p>
+**Figure — Layer-wise probing micro-F1 (placeholder).**
+
+<p align="center"> 
+  <img src="Visualizations/Probing%20Visualizations/DeepSeek%20R1%207B%20Attention%20Heatmaps/DeepSeek%20R1%20Sentence%20449.png" alt="Token attention heatmap example" style="max-width:700px; width:100%; height:auto;">
+</p>
+**Figure — Token-level attention heatmap (placeholder).**
 
 ---
 
@@ -441,5 +452,5 @@ BibTeX:
 ---
 **Please contact the authors for any queries:**
 
-### Sourav Das and Kripabandhu Ghosh
+### Sourav Das | Kripabandhu Ghosh
 ---
